@@ -63,6 +63,7 @@ struct ContentView: View {
             
             math
         }
+        .font(.body)
         .frame(minWidth: 350, minHeight: contentSize.height)
         .background {
             GeometryReader { geometry in
@@ -101,11 +102,20 @@ struct ContentView: View {
             HStack {
                 Text(selectedTo.rawValue.capitalized + " number:")
                 
-                if let result = Int128(valueToTranslate.withoutPrefix(selectedFrom.optionalPrefix), radix: selectedFrom.radix) {
-                    Text(selectedTo.optionalPrefix + String(result, radix: selectedTo.radix).uppercased())
+                let result = Int128(valueToTranslate.withoutPrefix(selectedFrom.optionalPrefix), radix: selectedFrom.radix)
+                let string = result.map { selectedTo.optionalPrefix + String($0, radix: selectedTo.radix).uppercased() }
+                
+                if let string {
+                    Text(string)
+                        .textSelection(.enabled)
                 } else {
                     Text("")
                 }
+                
+                Spacer()
+                
+                copyButton(textToCopy: string ?? "")
+                    .disabled(string == nil)
             }
         }
         .padding()
@@ -145,10 +155,11 @@ struct ContentView: View {
             HStack {
                 Text("=")
                 
-                if let operand1 = Int128(firstMathValue.withoutPrefix(mathRepresentation.optionalPrefix), radix: mathRepresentation.radix),
-                   let operand2 = Int128(secondMathValue.withoutPrefix(mathRepresentation.optionalPrefix), radix: mathRepresentation.radix)
-                {
-                    let result: MathResult = switch mathOperator {
+                let operand1 = Int128(firstMathValue.withoutPrefix(mathRepresentation.optionalPrefix), radix: mathRepresentation.radix)
+                let operand2 = Int128(secondMathValue.withoutPrefix(mathRepresentation.optionalPrefix), radix: mathRepresentation.radix)
+                
+                let result: MathResult? = operand1.flatMap { op1 in operand2.map { op2 in (op1, op2) } }.map { (operand1, operand2) in
+                    switch mathOperator {
                     case .addition: .math(operand1 + operand2)
                     case .subtraction: .math(operand1 - operand2)
                     case .multiplication: .math(operand1 * operand2)
@@ -159,16 +170,35 @@ struct ContentView: View {
                             .math(operand1 / operand2)
                         }
                     }
-                    
-                    if case let .math(number) = result {
-                        Text(mathRepresentation.optionalPrefix + String(number, radix: mathRepresentation.radix).uppercased())
-                    } else if case .div0 = result {
-                        Text("Divide by zero error 😠 Do better")
-                    }
                 }
+                let string: String? = result.flatMap {
+                    guard case let .math(number) = $0 else { return nil }
+                    
+                    return mathRepresentation.optionalPrefix + String(number, radix: mathRepresentation.radix).uppercased()
+                }
+                    
+                if let string {
+                    Text(string)
+                        .textSelection(.enabled)
+                } else if case .div0 = result {
+                    Text("Divide by zero error 😠 Do better")
+                }
+                
+                Spacer()
+                
+                copyButton(textToCopy: string ?? "")
+                    .disabled(string == nil)
             }
         }
         .padding()
+    }
+    
+    private func copyButton(textToCopy: String) -> some View {
+        Button {
+            NSPasteboard.general.setString(textToCopy, forType: .string)
+        } label: {
+            Image(systemName: "document.on.document")
+        }
     }
 }
 
