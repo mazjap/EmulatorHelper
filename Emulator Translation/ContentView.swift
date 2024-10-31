@@ -10,6 +10,9 @@ struct ContentView: View {
     @State var mathOperator: Math = .addition
     @State var secondMathValue = ""
     
+    @State var binaryBitCount = 8
+    @State var binaryNumber: UInt128 = 0
+    
     @State var contentSize = CGSize.zero
     
     @Binding var keepOnTop: Bool
@@ -21,7 +24,12 @@ struct ContentView: View {
             Divider()
             
             math
+            
+            Divider()
+            
+            binaryManipulation
         }
+        .padding(.vertical)
         .font(.body)
         .frame(minWidth: 350, minHeight: contentSize.height)
         .background {
@@ -85,7 +93,7 @@ struct ContentView: View {
                     .disabled(string == nil)
             }
         }
-        .padding()
+        .padding(.horizontal)
     }
     
     private var math: some View {
@@ -157,12 +165,84 @@ struct ContentView: View {
                     .disabled(string == nil)
             }
         }
-        .padding()
+        .padding(.horizontal)
+    }
+    
+    private var binaryManipulation: some View {
+        VStack {
+            HStack {
+                Text("Binary Manipulation")
+                    .font(.title)
+                
+                Spacer()
+            }
+            
+            HStack {
+                Button {
+                    binaryNumber <<= 1
+                } label: {
+                    Text("<<")
+                }
+                
+                Text("Shift Bits")
+                
+                Button {
+                    binaryNumber >>= 1
+                } label: {
+                    Text(">>")
+                }
+                
+                Spacer(minLength: 0)
+                
+                Button {
+                    if binaryBitCount <= 128 {
+                        binaryBitCount += 1
+                    }
+                } label: {
+                    Text("+")
+                }
+                
+                Text("Bit Count")
+                
+                Button {
+                    guard binaryBitCount != 0 else { return }
+                    
+                    binaryBitCount -= 1
+                    binaryNumber &= ~(1 << binaryBitCount)
+                } label: {
+                    Text("-")
+                }
+            }
+            
+            HStack(spacing: 3) {
+                ForEach((0..<binaryBitCount).reversed(), id: \.self) { bitIndex in
+                    VStack {
+                        Text("\(bitIndex + 1)")
+                        
+                        Button {
+                            binaryNumber |= (1 << bitIndex)
+                        } label: {
+                            Text("\(binaryNumber & (1 << bitIndex) == 0 ? 0 : 1)")
+                                .font(.system(size: 20, weight: .bold, design: .monospaced))
+                        }
+                    }
+                }
+                .buttonStyle(.plain)
+            }
+            
+            Text("Dec: \(String(binaryNumber, radix: 10))")
+            Text("Hex: 0x\(String(binaryNumber, radix: 16))")
+            Text("Oct: 0o\(String(binaryNumber, radix: 8))")
+        }
+        .padding(.horizontal)
     }
     
     private func copyButton(textToCopy: String) -> some View {
         Button {
-            NSPasteboard.general.setString(textToCopy, forType: .string)
+            let pasteboard = NSPasteboard.general
+            
+            let clearResult = pasteboard.clearContents()
+            let successfulCopy = pasteboard.setString(textToCopy, forType: .string)
         } label: {
             Image(systemName: "document.on.document")
         }
@@ -170,5 +250,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    @Previewable @State var isOnTop = false
+    
+    ContentView(keepOnTop: $isOnTop)
 }
