@@ -111,7 +111,6 @@ struct ContentView: View {
             
             HStack {
                 TextField("Operand", text: $firstMathValue)
-                    .layoutPriority(1)
                 
                 Picker(selection: $mathOperator) {
                     ForEach(Math.allCases) { operation in
@@ -124,7 +123,6 @@ struct ContentView: View {
                 .frame(width: NSFont.systemFontSize * 3)
                 
                 TextField("Operand", text: $secondMathValue)
-                    .layoutPriority(1)
             }
             
             HStack {
@@ -144,6 +142,9 @@ struct ContentView: View {
                         } else {
                             .math(operand1 / operand2)
                         }
+                    case .logicalAnd: .math(operand1 & operand2)
+                    case .logicalOr: .math(operand1 | operand2)
+                    case .logicalXor: .math(operand1 ^ operand2)
                     }
                 }
                 let string: String? = result.flatMap {
