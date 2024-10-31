@@ -1,48 +1,5 @@
 import SwiftUI
 
-enum Representation: String, CaseIterable, Identifiable {
-    case decimal
-    case binary
-    case hexadecimal
-    case octal
-    
-    var id: String { rawValue }
-    
-    var radix: Int {
-        switch self {
-        case .decimal: 10
-        case .binary: 2
-        case .hexadecimal: 16
-        case .octal: 8
-        }
-    }
-    
-    var optionalPrefix: String {
-        switch self {
-        case .decimal: ""
-        case .binary: "0b"
-        case .hexadecimal: "0x"
-        case .octal: "0o"
-        }
-    }
-}
-
-enum Math: String, CaseIterable, Identifiable {
-    case addition = "+"
-    case subtraction = "-"
-    case multiplication = "×"
-    case division = "÷"
-    
-    var id: String {
-        rawValue
-    }
-}
-
-enum MathResult {
-    case math(Int128)
-    case div0
-}
-
 struct ContentView: View {
     @State var valueToTranslate = ""
     @State var selectedFrom: Representation = .hexadecimal
@@ -54,6 +11,8 @@ struct ContentView: View {
     @State var secondMathValue = ""
     
     @State var contentSize = CGSize.zero
+    
+    @Binding var keepOnTop: Bool
     
     var body: some View {
         VStack(spacing: 3) {
@@ -77,8 +36,16 @@ struct ContentView: View {
     
     private var conversion: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Conversion")
-                .font(.title)
+            HStack {
+                Text("Conversion")
+                    .font(.title)
+                
+                Spacer()
+                
+                Toggle(isOn: $keepOnTop) {
+                    Text("Floating Window:")
+                }
+            }
             
             HStack {
                 Picker("From", selection: $selectedFrom) {
