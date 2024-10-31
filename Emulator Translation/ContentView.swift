@@ -206,12 +206,24 @@ struct ContentView: View {
                 Text("Bit Count")
                 
                 Button {
-                    guard binaryBitCount != 0 else { return }
+                    guard binaryBitCount > 1 else { return }
                     
                     binaryBitCount -= 1
                     binaryNumber &= ~(1 << binaryBitCount)
                 } label: {
                     Text("-")
+                }
+            }
+            
+            HStack {
+                Button("Set All") {
+                    binaryNumber |= (1 << binaryBitCount) - 1
+                }
+                
+                Spacer()
+                
+                Button("Clear All") {
+                    binaryNumber = 0
                 }
             }
             
@@ -221,7 +233,15 @@ struct ContentView: View {
                         Text("\(bitIndex + 1)")
                         
                         Button {
-                            binaryNumber |= (1 << bitIndex)
+                            let digitToModify: UInt128 = (1 << bitIndex)
+                            
+                            let isSet = binaryNumber & digitToModify != 0
+                            
+                            if isSet {
+                                binaryNumber &= ~digitToModify
+                            } else {
+                                binaryNumber |= digitToModify
+                            }
                         } label: {
                             Text("\(binaryNumber & (1 << bitIndex) == 0 ? 0 : 1)")
                                 .font(.system(size: 20, weight: .bold, design: .monospaced))
@@ -232,7 +252,7 @@ struct ContentView: View {
             }
             
             Text("Dec: \(String(binaryNumber, radix: 10))")
-            Text("Hex: 0x\(String(binaryNumber, radix: 16))")
+            Text("Hex: 0x\(String(binaryNumber, radix: 16).uppercased())")
             Text("Oct: 0o\(String(binaryNumber, radix: 8))")
         }
         .padding(.horizontal)
@@ -250,7 +270,7 @@ struct ContentView: View {
     }
 }
 
-#Preview {
+#Preview(traits: .sizeThatFitsLayout) {
     @Previewable @State var isOnTop = false
     
     ContentView(keepOnTop: $isOnTop)
