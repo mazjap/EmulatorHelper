@@ -220,7 +220,16 @@ struct ContentView: View {
                     binaryNumber |= (1 << binaryBitCount) - 1
                 }
                 
-                Spacer()
+                Spacer(minLength: 0)
+                
+                copyButton(textToCopy: {
+                    let binaryString = String(binaryNumber, radix: 2)
+                    
+                    
+                    return "0b" + String(repeating: "0", count: binaryBitCount - binaryString.count) + binaryString
+                }())
+                
+                Spacer(minLength: 0)
                 
                 Button("Clear All") {
                     binaryNumber = 0
