@@ -265,6 +265,13 @@ struct ContentView: View {
                             Text("\(binaryNumber & (1 << bitIndex) == 0 ? 0 : 1)")
                                 .font(.system(size: 20, weight: .bold, design: .monospaced))
                         }
+                        .onHover { isHovering in
+                            if isHovering {
+                                NSCursor.pointingHand.push()
+                            } else {
+                                NSCursor.pop()
+                            }
+                        }
                     }
                 }
                 .buttonStyle(.plain)
