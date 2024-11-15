@@ -1,4 +1,4 @@
-enum Representation: String, CaseIterable, Identifiable {
+enum NumeralSystem: String, CaseIterable, Identifiable {
     case decimal
     case binary
     case hexadecimal

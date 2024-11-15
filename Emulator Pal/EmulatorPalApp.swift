@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct Emulator_TranslationApp: App {
+struct EmulatorPalApp: App {
     @AppStorage("floating_window") private var keepOnTop = true
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
     

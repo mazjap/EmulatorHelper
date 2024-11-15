@@ -2,10 +2,10 @@ import SwiftUI
 
 struct ContentView: View {
     @State var valueToTranslate = ""
-    @State var selectedFrom: Representation = .hexadecimal
-    @State var selectedTo: Representation = .decimal
+    @State var selectedFrom: NumeralSystem = .hexadecimal
+    @State var selectedTo: NumeralSystem = .decimal
     
-    @State var mathRepresentation = Representation.hexadecimal
+    @State var mathRepresentation = NumeralSystem.hexadecimal
     @State var firstMathValue = ""
     @State var mathOperator: Math = .addition
     @State var secondMathValue = ""
@@ -57,14 +57,14 @@ struct ContentView: View {
             
             HStack {
                 Picker("From", selection: $selectedFrom) {
-                    ForEach(Representation.allCases) { rep in
+                    ForEach(NumeralSystem.allCases) { rep in
                         Text(rep.rawValue.capitalized)
                             .tag(rep)
                     }
                 }
                 
                 Picker("To", selection: $selectedTo) {
-                    ForEach(Representation.allCases) { rep in
+                    ForEach(NumeralSystem.allCases) { rep in
                         Text(rep.rawValue.capitalized)
                             .tag(rep)
                     }
@@ -102,7 +102,7 @@ struct ContentView: View {
                 .font(.title)
             
             Picker("Representation", selection: $mathRepresentation) {
-                ForEach(Representation.allCases) { rep in
+                ForEach(NumeralSystem.allCases) { rep in
                     Text(rep.rawValue.capitalized)
                         .tag(rep)
                 }
@@ -299,13 +299,13 @@ struct ContentView: View {
             
             HStack {
                 Text("Hex:")
-                Text("\(Representation.hexadecimal.optionalPrefix)\(String(binaryNumber, radix: 16).uppercased())")
+                Text("\(NumeralSystem.hexadecimal.optionalPrefix)\(String(binaryNumber, radix: 16).uppercased())")
                     .textSelection(.enabled)
             }
             
             HStack {
                 Text("Oct:")
-                Text("\(Representation.octal.optionalPrefix)\(String(binaryNumber, radix: 8))")
+                Text("\(NumeralSystem.octal.optionalPrefix)\(String(binaryNumber, radix: 8))")
                     .textSelection(.enabled)
             }
         }
