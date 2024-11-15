@@ -277,7 +277,18 @@ struct ContentView: View {
                 .buttonStyle(.plain)
             }
             
-            Text("Dec: \(String(binaryNumber, radix: 10))")
+            HStack {
+                Text("Dec: \(String(binaryNumber, radix: 10))")
+                
+                let lastBit: UInt128 = 1 << (binaryBitCount - 1)
+                
+                if binaryNumber & lastBit != 0 {
+                    let withoutLastBit = binaryNumber - lastBit
+                    Text("Signed: -\(String(lastBit - withoutLastBit, radix: 10))")
+                } else {
+                    Text("Signed: \(String(binaryNumber, radix: 10))")
+                }
+            }
             Text("Hex: 0x\(String(binaryNumber, radix: 16).uppercased())")
             Text("Oct: 0o\(String(binaryNumber, radix: 8))")
         }
