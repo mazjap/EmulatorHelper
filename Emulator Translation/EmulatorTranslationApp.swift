@@ -9,7 +9,7 @@ struct Emulator_TranslationApp: App {
         WindowGroup {
             ContentView(keepOnTop: $keepOnTop)
                 .onAppear {
-                    NSPasteboard.general.declareTypes([.string], owner: self)
+                    NSPasteboard.general.declareTypes([.string], owner: appDelegate)
                 }
         }
         .windowResizability(.contentSize)

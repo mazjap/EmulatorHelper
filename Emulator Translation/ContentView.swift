@@ -288,8 +288,13 @@ struct ContentView: View {
         Button {
             let pasteboard = NSPasteboard.general
             
-            let clearResult = pasteboard.clearContents()
+            pasteboard.prepareForNewContents()
+            
             let successfulCopy = pasteboard.setString(textToCopy, forType: .string)
+            
+            if !successfulCopy {
+                NSLog("Failed to copy \"\(textToCopy)\" to clipboard")
+            }
         } label: {
             Image(systemName: "document.on.document")
         }
