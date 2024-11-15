@@ -278,19 +278,36 @@ struct ContentView: View {
             }
             
             HStack {
-                Text("Dec: \(String(binaryNumber, radix: 10))")
+                Text("Dec:")
+                Text("\(String(binaryNumber, radix: 10))")
+                    .textSelection(.enabled)
                 
                 let lastBit: UInt128 = 1 << (binaryBitCount - 1)
                 
+                Text("") // Used for extra spacing
+                
+                Text("Signed:")
                 if binaryNumber & lastBit != 0 {
                     let withoutLastBit = binaryNumber - lastBit
-                    Text("Signed: -\(String(lastBit - withoutLastBit, radix: 10))")
+                    Text("-\(String(lastBit - withoutLastBit, radix: 10))")
+                        .textSelection(.enabled)
                 } else {
-                    Text("Signed: \(String(binaryNumber, radix: 10))")
+                    Text("\(String(binaryNumber, radix: 10))")
+                        .textSelection(.enabled)
                 }
             }
-            Text("Hex: 0x\(String(binaryNumber, radix: 16).uppercased())")
-            Text("Oct: 0o\(String(binaryNumber, radix: 8))")
+            
+            HStack {
+                Text("Hex:")
+                Text("\(Representation.hexadecimal.optionalPrefix)\(String(binaryNumber, radix: 16).uppercased())")
+                    .textSelection(.enabled)
+            }
+            
+            HStack {
+                Text("Oct:")
+                Text("\(Representation.octal.optionalPrefix)\(String(binaryNumber, radix: 8))")
+                    .textSelection(.enabled)
+            }
         }
         .padding(.horizontal)
     }
