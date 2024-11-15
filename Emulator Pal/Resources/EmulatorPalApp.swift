@@ -2,17 +2,17 @@ import SwiftUI
 
 @main
 struct EmulatorPalApp: App {
-    @AppStorage("floating_window") private var keepOnTop = true
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
+    @State private var settingsModel = AppSettingsViewModel(keepWindowOnTopDefaultValue: true)
     
     var body: some Scene {
         WindowGroup {
-            ContentView(keepOnTop: $keepOnTop)
+            ContentView(keepOnTop: $settingsModel.keepWindowOnTop)
                 .onAppear {
                     NSPasteboard.general.declareTypes([.string], owner: appDelegate)
                 }
         }
         .windowResizability(.contentSize)
-        .windowLevel(keepOnTop ? .floating : .normal)
+        .windowLevel(settingsModel.keepWindowOnTop ? .floating : .normal)
     }
 }

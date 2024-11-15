@@ -1,12 +1,16 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var contentSize = CGSize.zero
-    @Binding var keepOnTop: Bool
+    @State private var contentSize = CGSize.zero
+    @Binding private var keepOnTop: Bool
     
     @State private var conversionModel = ConversionViewModel()
     @State private var mathModel = MathViewModel()
     @State private var binaryManipulationModel = BinaryManipulationViewModel()
+    
+    init(keepOnTop: Binding<Bool>) {
+        self._keepOnTop = keepOnTop
+    }
     
     var body: some View {
         VStack(spacing: 3) {
