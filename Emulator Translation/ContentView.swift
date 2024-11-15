@@ -142,6 +142,12 @@ struct ContentView: View {
                         } else {
                             .math(operand1 / operand2)
                         }
+                    case .mod:
+                        if operand2 == 0 {
+                            .div0
+                        } else {
+                            .math(operand1 % operand2)
+                        }
                     case .logicalAnd: .math(operand1 & operand2)
                     case .logicalOr: .math(operand1 | operand2)
                     case .logicalXor: .math(operand1 ^ operand2)
@@ -181,6 +187,7 @@ struct ContentView: View {
             HStack {
                 Button {
                     binaryNumber <<= 1
+                    binaryNumber &= ~(1 << binaryBitCount)
                 } label: {
                     Text("<<")
                 }
@@ -189,6 +196,7 @@ struct ContentView: View {
                 
                 Button {
                     binaryNumber >>= 1
+                    binaryNumber &= ~(1 << binaryBitCount)
                 } label: {
                     Text(">>")
                 }
@@ -196,12 +204,13 @@ struct ContentView: View {
                 Spacer(minLength: 0)
                 
                 Button {
-                    if binaryBitCount <= 128 {
+                    if binaryBitCount < 128 {
                         binaryBitCount += 1
                     }
                 } label: {
                     Text("+")
                 }
+                .buttonRepeatBehavior(.enabled)
                 
                 Text("Bit Count")
                 
@@ -213,18 +222,19 @@ struct ContentView: View {
                 } label: {
                     Text("-")
                 }
+                .buttonRepeatBehavior(.enabled)
             }
             
             HStack {
                 Button("Set All") {
-                    binaryNumber |= (1 << binaryBitCount) - 1
+                    let lastBit: UInt128 = (1 << (binaryBitCount - 1))
+                    binaryNumber |= (lastBit - 1 | lastBit)
                 }
                 
                 Spacer(minLength: 0)
                 
                 copyButton(textToCopy: {
                     let binaryString = String(binaryNumber, radix: 2)
-                    
                     
                     return "0b" + String(repeating: "0", count: binaryBitCount - binaryString.count) + binaryString
                 }())

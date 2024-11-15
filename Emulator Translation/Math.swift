@@ -3,6 +3,7 @@ enum Math: String, CaseIterable, Identifiable {
     case subtraction = "-"
     case multiplication = "×"
     case division = "÷"
+    case mod = "%"
     case logicalAnd = "&"
     case logicalOr = "|"
     case logicalXor = "^"
