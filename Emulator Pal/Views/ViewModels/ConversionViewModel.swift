@@ -5,6 +5,7 @@ enum ConversionError {
 }
 
 @Observable
+@MainActor
 class ConversionViewModel {
     var valueToConvert = ""
     var convertFromType = NumeralSystem.hexadecimal

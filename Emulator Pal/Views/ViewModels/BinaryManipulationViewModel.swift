@@ -1,6 +1,7 @@
 import Foundation
 
 @Observable
+@MainActor
 class BinaryManipulationViewModel {
     var binaryBitCount = 8
     var binaryNumber: UInt128 = 0

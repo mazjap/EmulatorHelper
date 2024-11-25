@@ -8,14 +8,7 @@ struct BinaryManipulationView: View {
     }
     
     var body: some View {
-        VStack {
-            HStack {
-                Text("Binary Manipulation")
-                    .font(.title)
-                
-                Spacer()
-            }
-            
+        ContentHeader("Binary Manipulation") {
             HStack {
                 Button("<<", action: model.shiftLeft)
                 Text("Shift Bits")
@@ -41,51 +34,59 @@ struct BinaryManipulationView: View {
                 Button("Clear All", action: model.clearAllBits)
             }
             
-            HStack(spacing: 3) {
-                ForEach((0..<model.binaryBitCount).reversed(), id: \.self) { bitIndex in
-                    VStack {
-                        Text("\(bitIndex + 1)")
-                        
-                        Button {
-                            model.toggleBit(at: bitIndex)
-                        } label: {
-                            Text("\(model.binaryNumber & (1 << bitIndex) == 0 ? 0 : 1)")
-                                .font(.system(size: 20, weight: .bold, design: .monospaced))
-                        }
-                        .onHover { isHovering in
-                            if isHovering {
-                                NSCursor.pointingHand.push()
-                            } else {
-                                NSCursor.pop()
+            HStack {
+                Spacer(minLength: 0)
+                
+                VStack {
+                    HStack(spacing: 3) {
+                        ForEach((0..<model.binaryBitCount).reversed(), id: \.self) { bitIndex in
+                            VStack {
+                                Text("\(bitIndex + 1)")
+                                
+                                Button {
+                                    model.toggleBit(at: bitIndex)
+                                } label: {
+                                    Text("\(model.binaryNumber & (1 << bitIndex) == 0 ? 0 : 1)")
+                                        .font(.system(size: 20, weight: .bold, design: .monospaced))
+                                }
+                                .onHover { isHovering in
+                                    if isHovering {
+                                        NSCursor.pointingHand.push()
+                                    } else {
+                                        NSCursor.pop()
+                                    }
+                                }
                             }
                         }
+                        .buttonStyle(.plain)
+                    }
+                    
+                    HStack {
+                        Text("Dec:")
+                        Text(model.decimalStringRepresentation)
+                            .textSelection(.enabled)
+                        
+                        Text("") // Used for extra spacing
+                        
+                        Text("Signed:")
+                        Text(model.signedDecimalStringRepresentation)
+                            .textSelection(.enabled)
+                    }
+                    
+                    HStack {
+                        Text("Hex:")
+                        Text(model.hexidecimalStringRepresentation)
+                            .textSelection(.enabled)
+                    }
+                    
+                    HStack {
+                        Text("Oct:")
+                        Text(model.octalStringRepresentation)
+                            .textSelection(.enabled)
                     }
                 }
-                .buttonStyle(.plain)
-            }
-            
-            HStack {
-                Text("Dec:")
-                Text(model.decimalStringRepresentation)
-                    .textSelection(.enabled)
                 
-                Text("") // Used for extra spacing
-                
-                Text("Signed:")
-                Text(model.signedDecimalStringRepresentation)
-                    .textSelection(.enabled)
-            }
-            
-            HStack {
-                Text("Hex:")
-                Text(model.hexidecimalStringRepresentation)
-                    .textSelection(.enabled)
-            }
-            
-            HStack {
-                Text("Oct:")
-                Text(model.octalStringRepresentation)
-                    .textSelection(.enabled)
+                Spacer(minLength: 0)
             }
         }
         .padding(.horizontal)

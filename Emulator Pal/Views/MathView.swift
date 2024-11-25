@@ -8,10 +8,7 @@ struct MathView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Math")
-                .font(.title)
-            
+        ContentHeader("Math") {
             Picker("Representation", selection: $model.numeralSystem) {
                 ForEach(NumeralSystem.allCases) { rep in
                     Text(rep.rawValue.capitalized)

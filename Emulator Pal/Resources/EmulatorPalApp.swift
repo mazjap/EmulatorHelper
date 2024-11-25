@@ -7,7 +7,8 @@ struct EmulatorPalApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView(keepOnTop: $settingsModel.keepWindowOnTop)
+            ContentView()
+                .environment(settingsModel)
                 .onAppear {
                     NSPasteboard.general.declareTypes([.string], owner: appDelegate)
                 }

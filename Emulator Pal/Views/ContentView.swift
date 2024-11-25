@@ -1,20 +1,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var contentSize = CGSize.zero
-    @Binding private var keepOnTop: Bool
-    
     @State private var conversionModel = ConversionViewModel()
     @State private var mathModel = MathViewModel()
     @State private var binaryManipulationModel = BinaryManipulationViewModel()
-    
-    init(keepOnTop: Binding<Bool>) {
-        self._keepOnTop = keepOnTop
-    }
+    @State private var contentSize = CGSize.zero
     
     var body: some View {
         VStack(spacing: 3) {
-            ConversionView(model: conversionModel, keepOnTop: $keepOnTop)
+            ConversionView(model: conversionModel)
             
             Divider()
             
@@ -24,7 +18,7 @@ struct ContentView: View {
             
             BinaryManipulationView(model: binaryManipulationModel)
         }
-        .padding(.vertical)
+        .padding(.bottom)
         .font(.body)
         .frame(minWidth: 350, minHeight: contentSize.height)
         .background {
@@ -39,7 +33,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    @Previewable @State var isOnTop = false
-    
-    ContentView(keepOnTop: $isOnTop)
+    ContentView()
 }

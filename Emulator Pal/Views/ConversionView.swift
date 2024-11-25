@@ -2,26 +2,15 @@ import SwiftUI
 
 struct ConversionView: View {
     @Bindable private var model: ConversionViewModel
-    @Binding private var keepOnTop: Bool
     
-    init(model: ConversionViewModel, keepOnTop: Binding<Bool>) {
+    init(model: ConversionViewModel) {
         self.model = model
-        self._keepOnTop = keepOnTop
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Text("Conversion")
-                    .font(.title)
-                
-                Spacer()
-                
-                Toggle(isOn: $keepOnTop) {
-                    Text("Floating Window:")
-                }
-            }
-            
+        ContentHeader("Conversion") {
+            FloatingToggle()
+        } content: {
             HStack {
                 Picker("From", selection: $model.convertFromType) {
                     ForEach(NumeralSystem.allCases) { rep in
@@ -66,5 +55,5 @@ struct ConversionView: View {
 }
 
 #Preview {
-    ConversionView(model: ConversionViewModel(), keepOnTop: .constant(true))
+    ConversionView(model: ConversionViewModel())
 }

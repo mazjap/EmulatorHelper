@@ -14,6 +14,7 @@ enum MathError {
 }
 
 @Observable
+@MainActor
 class MathViewModel {
     var numeralSystem = NumeralSystem.hexadecimal
     var firstMathValue = ""
