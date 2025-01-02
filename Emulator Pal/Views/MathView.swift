@@ -9,13 +9,15 @@ struct MathView: View {
     
     var body: some View {
         ContentHeader("Math") {
+            Spacer()
+            
             Picker("Representation", selection: $model.numeralSystem) {
                 ForEach(NumeralSystem.allCases) { rep in
                     Text(rep.rawValue.capitalized)
                         .tag(rep)
                 }
             }
-            
+        } content: {
             HStack {
                 TextField("Operand", text: $model.firstMathValue)
                     .background {
