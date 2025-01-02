@@ -34,4 +34,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environment(AppSettingsViewModel(keepWindowOnTopDefaultValue: true))
 }

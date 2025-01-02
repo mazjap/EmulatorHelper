@@ -56,4 +56,5 @@ struct ConversionView: View {
 
 #Preview {
     ConversionView(model: ConversionViewModel())
+        .environment(AppSettingsViewModel(keepWindowOnTopDefaultValue: true))
 }

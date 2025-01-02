@@ -12,4 +12,5 @@ struct FloatingToggle: View {
 
 #Preview {
     FloatingToggle()
+        .environment(AppSettingsViewModel(keepWindowOnTopDefaultValue: true))
 }
