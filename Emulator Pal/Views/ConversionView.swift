@@ -9,7 +9,18 @@ struct ConversionView: View {
     
     var body: some View {
         ContentHeader("Conversion") {
-            FloatingToggle()
+            HStack {
+                Button {
+                    model.swapConversionTypes()
+                } label: {
+                    Label("Swap types", systemImage: "repeat")
+                }
+                .labelStyle(.iconOnly)
+                
+                Spacer()
+                
+                FloatingToggle()
+            }
         } content: {
             HStack {
                 Picker("From", selection: $model.convertFromType) {

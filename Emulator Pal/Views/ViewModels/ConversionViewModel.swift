@@ -32,4 +32,11 @@ class ConversionViewModel {
         userFacingError = .invalid
         return ""
     }
+    
+    func swapConversionTypes() {
+        let oldFrom = convertFromType
+        
+        convertFromType = convertToType
+        convertToType = oldFrom
+    }
 }
