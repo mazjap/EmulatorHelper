@@ -77,4 +77,14 @@ class BinaryManipulationViewModel {
             binaryNumber |= digitToModify
         }
     }
+    
+    func flipAllBits() {
+        if binaryBitCount == 128 {
+            binaryNumber = ~binaryNumber
+        } else {
+            let bitmap: UInt128 = (1 << binaryBitCount) - 1
+            let invertedNumber = ~binaryNumber
+            binaryNumber = invertedNumber & bitmap
+        }
+    }
 }

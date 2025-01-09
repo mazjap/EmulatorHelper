@@ -2,6 +2,7 @@ import SwiftUI
 
 struct BinaryManipulationView: View {
     @Bindable private var model: BinaryManipulationViewModel
+    @State private var indexFromOne: Bool = true
     
     init(model: BinaryManipulationViewModel) {
         self.model = model
@@ -9,29 +10,40 @@ struct BinaryManipulationView: View {
     
     var body: some View {
         ContentHeader("Binary Manipulation") {
-            HStack {
-                Button("<<", action: model.shiftLeft)
-                Text("Shift Bits")
-                Button(">>", action: model.shiftRight)
+            Toggle("Index From 1", isOn: $indexFromOne)
+        } content: {
+            ZStack {
+                HStack {
+                    Button("<<", action: model.shiftLeft)
+                    Text("Shift")
+                    Button(">>", action: model.shiftRight)
+                    
+                    Spacer(minLength: 0)
+                    
+                    Button("+", action: model.increaseBitCount)
+                    Text("Count")
+                    Button("-", action: model.decreaseBitCount)
+                }
                 
-                Spacer(minLength: 0)
-                
-                Button("+", action: model.increaseBitCount)
-                Text("Bit Count")
-                Button("-", action: model.decreaseBitCount)
+                CopyButton(textToCopy: model.binaryStringRepresentation)
             }
             .buttonRepeatBehavior(.enabled)
             
-            HStack {
-                Button("Set All", action: model.setAllBits)
+            ZStack {
+                HStack {
+                    Button("Set All", action: model.setAllBits)
+                    
+                    Spacer(minLength: 0)
+                    
+                    Button("Clear All", action: model.clearAllBits)
+                }
                 
-                Spacer(minLength: 0)
-                
-                CopyButton(textToCopy: model.binaryStringRepresentation)
-                
-                Spacer(minLength: 0)
-                
-                Button("Clear All", action: model.clearAllBits)
+                Button {
+                    model.flipAllBits()
+                } label: {
+                    Label("Flip all bits", systemImage: "repeat")
+                        .labelStyle(.iconOnly)
+                }
             }
             
             HStack {
@@ -41,7 +53,7 @@ struct BinaryManipulationView: View {
                     HStack(spacing: 3) {
                         ForEach((0..<model.binaryBitCount).reversed(), id: \.self) { bitIndex in
                             VStack {
-                                Text("\(bitIndex + 1)")
+                                Text("\(bitIndex + (indexFromOne ? 1 : 0))")
                                 
                                 Button {
                                     model.toggleBit(at: bitIndex)
