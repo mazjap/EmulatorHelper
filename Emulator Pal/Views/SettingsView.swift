@@ -5,7 +5,7 @@ struct FloatingToggle: View {
     
     var body: some View {
         Toggle(isOn: Bindable(settingsModel).keepWindowOnTop) {
-            Text("Floating Window:")
+            Text("Floating Window")
         }
     }
 }

@@ -3,9 +3,23 @@ import SwiftUI
 struct BinaryManipulationView: View {
     @Bindable private var model: BinaryManipulationViewModel
     @State private var indexFromOne: Bool = true
+    @FocusBinding private var focusedField: Field?
     
-    init(model: BinaryManipulationViewModel) {
+    enum Field: Hashable {
+        case shiftLeftButton
+        case shiftRightButton
+        case copyButton
+        case increaseBitCountButton
+        case decreaseBitCountButton
+        case setAllButton
+        case flipButton
+        case clearAllButton
+        case bit(UInt8)
+    }
+    
+    init(model: BinaryManipulationViewModel, focusedField: FocusBinding<Field?>) {
         self.model = model
+        self._focusedField = focusedField
     }
     
     var body: some View {
@@ -15,27 +29,45 @@ struct BinaryManipulationView: View {
             ZStack {
                 HStack {
                     Button("<<", action: model.shiftLeft)
+                        .focusable()
+                        .focused($focusedField, equals: .shiftLeftButton)
+                    
                     Text("Shift")
+                    
                     Button(">>", action: model.shiftRight)
+                        .focusable()
+                        .focused($focusedField, equals: .shiftRightButton)
                     
                     Spacer(minLength: 0)
                     
                     Button("+", action: model.increaseBitCount)
+                        .focusable()
+                        .focused($focusedField, equals: .increaseBitCountButton)
+                    
                     Text("Count")
+                    
                     Button("-", action: model.decreaseBitCount)
+                        .focusable()
+                        .focused($focusedField, equals: .decreaseBitCountButton)
                 }
                 
                 CopyButton(textToCopy: model.binaryStringRepresentation)
+                    .focusable()
+                    .focused($focusedField, equals: .copyButton)
             }
             .buttonRepeatBehavior(.enabled)
             
             ZStack {
                 HStack {
                     Button("Set All", action: model.setAllBits)
+                        .focusable()
+                        .focused($focusedField, equals: .setAllButton)
                     
                     Spacer(minLength: 0)
                     
                     Button("Clear All", action: model.clearAllBits)
+                        .focusable()
+                        .focused($focusedField, equals: .clearAllButton)
                 }
                 
                 Button {
@@ -44,6 +76,8 @@ struct BinaryManipulationView: View {
                     Label("Flip all bits", systemImage: "repeat")
                         .labelStyle(.iconOnly)
                 }
+                .focusable()
+                .focused($focusedField, equals: .flipButton)
             }
             
             HStack {
@@ -68,6 +102,8 @@ struct BinaryManipulationView: View {
                                         NSCursor.pop()
                                     }
                                 }
+                                .focusable()
+                                .focused($focusedField, equals: .bit(UInt8(bitIndex)))
                             }
                         }
                         .buttonStyle(.plain)
@@ -106,5 +142,7 @@ struct BinaryManipulationView: View {
 }
 
 #Preview {
-    BinaryManipulationView(model: BinaryManipulationViewModel())
+    @Previewable @FocusState var focusedField: BinaryManipulationView.Field?
+    
+    BinaryManipulationView(model: BinaryManipulationViewModel(), focusedField: $focusedField)
 }

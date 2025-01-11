@@ -2,9 +2,20 @@ import SwiftUI
 
 struct ConversionView: View {
     @Bindable private var model: ConversionViewModel
+    @FocusBinding private var focusedField: Field?
     
-    init(model: ConversionViewModel) {
+    enum Field: Hashable {
+        case swapButton
+        case floatingWindowToggle
+        case fromMenu
+        case toMenu
+        case input
+        case copyButton
+    }
+    
+    init(model: ConversionViewModel, focusedField: FocusBinding<Field?>) {
         self.model = model
+        self._focusedField = focusedField
     }
     
     var body: some View {
@@ -16,30 +27,47 @@ struct ConversionView: View {
                     Label("Swap types", systemImage: "repeat")
                 }
                 .labelStyle(.iconOnly)
+                .focusable()
+                .focused($focusedField, equals: .swapButton)
                 
                 Spacer()
                 
                 FloatingToggle()
+                    .focusable()
+                    .focused($focusedField, equals: .floatingWindowToggle)
             }
         } content: {
             HStack {
-                Picker("From", selection: $model.convertFromType) {
+                Menu {
                     ForEach(NumeralSystem.allCases) { rep in
-                        Text(rep.rawValue.capitalized)
-                            .tag(rep)
+                        Button(rep.rawValue.capitalized) {
+                            model.convertFromType = rep
+                        }
+                        .focusable()
                     }
+                } label: {
+                    Text("From: \(model.convertFromType.rawValue.capitalized)")
                 }
+                .focusable()
+                .focused($focusedField, equals: .fromMenu)
+                .keyboardShortcut(.return)
                 
-                Picker("To", selection: $model.convertToType) {
+                Menu {
                     ForEach(NumeralSystem.allCases) { rep in
-                        Text(rep.rawValue.capitalized)
-                            .tag(rep)
+                        Button(rep.rawValue.capitalized) {
+                            model.convertToType = rep
+                        }
                     }
+                } label: {
+                    Text("To: \(model.convertToType.rawValue.capitalized)")
                 }
+                .focusable()
+                .focused($focusedField, equals: .fromMenu)
+                .keyboardShortcut(.return)
             }
-            .pickerStyle(.menu)
             
             TextField("Enter number", text: $model.valueToConvert)
+                .focused($focusedField, equals: .input)
                 .background {
                     if model.userFacingError == .invalid {
                         Rectangle()
@@ -59,6 +87,8 @@ struct ConversionView: View {
                 
                 CopyButton(textToCopy: convertedValue)
                     .disabled(convertedValue.isEmpty)
+                    .focusable()
+                    .focused($focusedField, equals: .copyButton)
             }
         }
         .padding(.horizontal)
@@ -66,6 +96,8 @@ struct ConversionView: View {
 }
 
 #Preview {
-    ConversionView(model: ConversionViewModel())
+    @Previewable @FocusState var focusedField: ConversionView.Field?
+    
+    ConversionView(model: ConversionViewModel(), focusedField: $focusedField)
         .environment(AppSettingsViewModel(keepWindowOnTopDefaultValue: true))
 }

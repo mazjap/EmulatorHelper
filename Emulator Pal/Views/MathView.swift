@@ -2,21 +2,37 @@ import SwiftUI
 
 struct MathView: View {
     @Bindable private var model: MathViewModel
+    @FocusBinding private var focusedField: Field?
     
-    init(model: MathViewModel) {
+    enum Field: Hashable {
+        case representationMenu
+        case operand1Input
+        case operationMenu
+        case operand2Input
+        case copyButton
+    }
+    
+    init(model: MathViewModel, focusedField: FocusBinding<Field?>) {
         self.model = model
+        self._focusedField = focusedField
     }
     
     var body: some View {
         ContentHeader("Math") {
             Spacer()
             
-            Picker("Representation", selection: $model.numeralSystem) {
+            Menu {
                 ForEach(NumeralSystem.allCases) { rep in
-                    Text(rep.rawValue.capitalized)
-                        .tag(rep)
+                    Button(rep.rawValue.capitalized) {
+                        model.numeralSystem = rep
+                    }
+                    .tag(rep)
                 }
+            } label: {
+                Text("Representation: \(model.numeralSystem.rawValue.capitalized)")
             }
+            .focusable()
+            .focused($focusedField, equals: .representationMenu)
         } content: {
             HStack {
                 TextField("Operand", text: $model.firstMathValue)
@@ -27,16 +43,21 @@ struct MathView: View {
                                 .stroke(Color.red, lineWidth: 1)
                         }
                     }
+                    .focused($focusedField, equals: .operand1Input)
                 
-                Picker(selection: $model.mathOperator) {
+                Menu {
                     ForEach(Math.allCases) { operation in
-                        Text(operation.rawValue)
-                            .tag(operation)
+                        Button(operation.rawValue) {
+                            model.mathOperator = operation
+                        }
                     }
                 } label: {
-                    EmptyView()
+                    Text(model.mathOperator.rawValue)
                 }
                 .frame(width: NSFont.systemFontSize * 3)
+                .focusable()
+                .focused($focusedField, equals: .operationMenu)
+                
                 
                 TextField("Operand", text: $model.secondMathValue)
                     .background {
@@ -46,6 +67,7 @@ struct MathView: View {
                                 .stroke(Color.red, lineWidth: 1)
                         }
                     }
+                    .focused($focusedField, equals: .operand2Input)
             }
             
             HStack {
@@ -65,6 +87,8 @@ struct MathView: View {
                 
                 CopyButton(textToCopy: string ?? "")
                     .disabled(string == nil)
+                    .focusable()
+                    .focused($focusedField, equals: .copyButton)
             }
         }
         .padding(.horizontal)
@@ -72,5 +96,7 @@ struct MathView: View {
 }
 
 #Preview {
-    MathView(model: MathViewModel())
+    @Previewable @FocusState var focusedField: MathView.Field?
+    
+    MathView(model: MathViewModel(), focusedField: $focusedField)
 }
