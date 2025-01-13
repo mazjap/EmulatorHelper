@@ -4,7 +4,6 @@ struct ContentView: View {
     @State private var conversionModel = ConversionViewModel()
     @State private var mathModel = MathViewModel()
     @State private var binaryManipulationModel = BinaryManipulationViewModel()
-    @State private var contentSize = CGSize.zero
     
     @FocusState private var conversionField: ConversionView.Field?
     @FocusState private var mathField: MathView.Field?
@@ -24,24 +23,19 @@ struct ContentView: View {
         }
         .padding(.bottom)
         .font(.body)
-        .frame(minWidth: 350, minHeight: contentSize.height)
+        .frame(minWidth: 350, minHeight: 500)
         .background {
-            GeometryReader { geometry in
-                Color(NSColor.windowBackgroundColor)
-                    .onChange(of: geometry.size, initial: true) {
-                        contentSize = geometry.size
-                    }
-                    .onTapGesture {
-                        conversionField = nil
-                        mathField = nil
-                        binaryManipulationField = nil
-                    }
-            }
+            Color(NSColor.windowBackgroundColor)
+                .onTapGesture {
+                    conversionField = nil
+                    mathField = nil
+                    binaryManipulationField = nil
+                }
         }
     }
 }
 
-#Preview {
+#Preview(traits: .fixedLayout(width: 350, height: 500)) {
     ContentView()
         .environment(AppSettingsViewModel(keepWindowOnTopDefaultValue: true))
 }
