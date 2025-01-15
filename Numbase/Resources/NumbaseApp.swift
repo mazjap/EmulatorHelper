@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct EmulatorPalApp: App {
+struct NumbaseApp: App {
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
     @State private var settingsModel = AppSettingsViewModel(keepWindowOnTopDefaultValue: true)
     
@@ -14,6 +14,5 @@ struct EmulatorPalApp: App {
                 }
         }
         .windowResizability(.contentSize)
-        .windowLevel(settingsModel.keepWindowOnTop ? .floating : .normal)
     }
 }

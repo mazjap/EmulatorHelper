@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "0EE63FD12CD1849600C13035"
-               BuildableName = "Emulator Pal.app"
-               BlueprintName = "Emulator Pal"
-               ReferencedContainer = "container:Emulator Pal.xcodeproj">
+               BuildableName = "Numbase.app"
+               BlueprintName = "Numbase"
+               ReferencedContainer = "container:Numbase.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "0EE63FD12CD1849600C13035"
-            BuildableName = "Emulator Pal.app"
-            BlueprintName = "Emulator Pal"
-            ReferencedContainer = "container:Emulator Pal.xcodeproj">
+            BuildableName = "Numbase.app"
+            BlueprintName = "Numbase"
+            ReferencedContainer = "container:Numbase.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "0EE63FD12CD1849600C13035"
-            BuildableName = "Emulator Pal.app"
-            BlueprintName = "Emulator Pal"
-            ReferencedContainer = "container:Emulator Pal.xcodeproj">
+            BuildableName = "Numbase.app"
+            BlueprintName = "Numbase"
+            ReferencedContainer = "container:Numbase.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -85,10 +85,15 @@ struct MathView: View {
                 
                 Spacer()
                 
-                CopyButton(textToCopy: string ?? "")
-                    .disabled(string == nil)
-                    .focusable()
-                    .focused($focusedField, equals: .copyButton)
+                Button {
+                    copyToClipboard(string ?? "")
+                } label: {
+                    Label("Copy text", systemImage: "document.on.document")
+                        .labelStyle(.iconOnly)
+                }
+                .disabled(string == nil || string!.isEmpty)
+                .focusable()
+                .focused($focusedField, equals: .copyButton)
             }
         }
         .padding(.horizontal)

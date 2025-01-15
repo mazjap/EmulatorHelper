@@ -51,9 +51,14 @@ struct BinaryManipulationView: View {
                         .focused($focusedField, equals: .decreaseBitCountButton)
                 }
                 
-                CopyButton(textToCopy: model.binaryStringRepresentation)
-                    .focusable()
-                    .focused($focusedField, equals: .copyButton)
+                Button {
+                    copyToClipboard(model.binaryStringRepresentation)
+                } label: {
+                    Label("Copy text", systemImage: "document.on.document")
+                        .labelStyle(.iconOnly)
+                }
+                .focusable()
+                .focused($focusedField, equals: .copyButton)
             }
             .buttonRepeatBehavior(.enabled)
             
@@ -105,6 +110,7 @@ struct BinaryManipulationView: View {
                                 .focusable()
                                 .focused($focusedField, equals: .bit(UInt8(bitIndex)))
                             }
+                            .accessibilityElement(children: .combine)
                         }
                         .buttonStyle(.plain)
                     }

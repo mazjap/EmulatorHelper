@@ -85,10 +85,15 @@ struct ConversionView: View {
                 
                 Spacer()
                 
-                CopyButton(textToCopy: convertedValue)
-                    .disabled(convertedValue.isEmpty)
-                    .focusable()
-                    .focused($focusedField, equals: .copyButton)
+                Button {
+                    copyToClipboard(convertedValue)
+                } label: {
+                    Label("Copy text", systemImage: "document.on.document")
+                        .labelStyle(.iconOnly)
+                }
+                .disabled(convertedValue.isEmpty)
+                .focusable()
+                .focused($focusedField, equals: .copyButton)
             }
         }
         .padding(.horizontal)
