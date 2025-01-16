@@ -45,7 +45,7 @@ Numbase is a macOS utility for converting between number bases (decimal, binary,
 - Apple Silicon or Intel Mac
 
 ## Installation
-- ~~Download from the Mac App Store~~ - Awaiting approval
+- [Download from the Mac App Store](https://apps.apple.com/us/app/numbase/id6740551555)
 - Build locally:
   1. Clone the project
   2. Open in Xcode
